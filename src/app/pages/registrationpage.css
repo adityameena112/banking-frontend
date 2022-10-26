@@ -1,0 +1,11 @@
+.page-container {
+    width: 50%;
+    margin: auto;
+    margin-top: 7%;   
+    background-color: aliceblue;
+    border-radius: 2%;
+}
+
+.inner-page-container {
+    margin: 2%;
+}
