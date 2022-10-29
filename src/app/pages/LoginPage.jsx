@@ -2,41 +2,49 @@ import React, { Component } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import './loginpage.css'
 import * as HttpService from '../util/HttpService'
-import { Navigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CircularProgress } from '@mui/material';
 
 class LoginPage extends Component {
     state = {
         email: '',
-        password: ''
+        password: '',
+        loading: false
     }
 
 
 
     handleLogin = () => {
+        this.setState({ loading: true })
         HttpService.authenticateUser({
             username: this.state.email,
             password: this.state.password
         }).then((response)=>{
             localStorage.setItem('token', response.data.id_token)
             toast.success("Login Successful")
+            this.setState({ loading: false })
+            // this.props.history.push('/dashboard')
             window.location.href ='/dashboard'
+            
         }).catch((error)=>{
             toast.error("Incorrect Email & Password")
+            this.setState({ loading: false })
         })
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+                <CircularProgress />
+            )
+        }
         return (
             <div className="page-container">
                 <Form className="inner-page-container">
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="Enter email" onChange={(e) => this.setState({ email: e.target.value })} />
-                        <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
-                        </Form.Text>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">

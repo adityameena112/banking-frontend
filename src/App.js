@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import LoginPage from './app/pages/LoginPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistrationPage from './app/pages/RegistrationPage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import NavbarComp from './app/components/NavbarComp';
 import DashboardPage from './app/pages/DashboardPage';
 

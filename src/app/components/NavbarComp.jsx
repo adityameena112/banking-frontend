@@ -29,10 +29,9 @@ class NavbarComp extends Component {
                     <Nav className="me-auto">
                         {!this.state.isLoggedIn && <Nav.Link as={Link} to="/">Home</Nav.Link>}
                         {!this.state.isLoggedIn && <Nav.Link as={Link} to="/register">Register</Nav.Link>}
-                        {this.state.isLoggedIn && <Nav.Link href="#pricing">Dashboard</Nav.Link>}
-                        {this.state.isLoggedIn && <Nav.Link href="#pricing">Payment History</Nav.Link>}
-                        {this.state.isLoggedIn && <Nav.Link href="#pricing">Transactions History</Nav.Link>}
-                        {this.state.isLoggedIn && <Nav.Link href="#pricing" onClick={this.handleLogout}>Logout</Nav.Link>}
+                        {this.state.isLoggedIn && <Nav.Link href="/dashboard">Dashboard</Nav.Link>}
+                        {this.state.isLoggedIn && <Nav.Link href="/transcations-history">Transactions History</Nav.Link>}
+                        {this.state.isLoggedIn && <Nav.Link href="#" onClick={this.handleLogout}>Logout</Nav.Link>}
                     </Nav>
                 </Container>
             </Navbar>
