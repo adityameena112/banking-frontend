@@ -21,4 +21,17 @@ const fetchUserAccountList = () => {
     })
 }
 
-export { authenticateUser, fetchUserAccountList, registerUser }
+const createAccount = (body) => {
+    return axios.request({
+        url: Constant.CREATE_ACCOUNT,
+        method: 'post',
+        baseURL: Constant.BASE_URL,
+        headers: {
+            // 'content-type': 'application/json' ,
+            'Authorization': "Bearer " + localStorage.getItem('token')
+        },
+        data: body
+    })
+}
+
+export { authenticateUser, fetchUserAccountList, registerUser, createAccount }

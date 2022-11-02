@@ -13,6 +13,12 @@ class LoginPage extends Component {
         loading: false
     }
 
+    componentDidMount() {
+        if (localStorage.getItem('token')) {
+            window.location.href = "/dashboard"
+        }
+    }
+
 
 
     handleLogin = () => {
@@ -53,7 +59,7 @@ class LoginPage extends Component {
                     </Form.Group>
                     
                     <Button variant="primary" type="button" onClick={this.handleLogin}>
-                        Submit
+                        Login
                     </Button>
 
                 </Form>

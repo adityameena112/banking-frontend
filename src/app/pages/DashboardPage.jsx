@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import * as HttpService from '../util/HttpService'
 import { ToastContainer, toast } from 'react-toastify';
-import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import './dashboardpage.css'
+import AddAccountModal from '../components/AddAccountModal';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 class DashboardPage extends Component {
     state = {
         accountList: [],
-        open: false
+        open: false,
+        openAddAccountModal: false
+
     }
 
     componentDidMount() {
@@ -18,7 +20,6 @@ class DashboardPage extends Component {
 
     fetchAccountList = () => {
         HttpService.fetchUserAccountList().then((response) => {
-            console.log(response.data);
             toast.success("Accounts: " + response.data?.length)
             this.setState({ accountList: response.data })
         }).catch((error) => {
@@ -53,72 +54,61 @@ class DashboardPage extends Component {
                 }
                 {
                     this.state.accountList.length > 0 &&
-                    <div className="dashboard-table-container">
-                        <TableContainer component={Paper}>
-                            <Table aria-label="collapsible table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell className="order-table-heading" >Your Accounts</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {this.state.accountList.map(account => (
-                                        <React.Fragment>
-                                            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                                                <TableCell>
-                                                    <IconButton
-                                                        aria-label="expand row"
-                                                        size="small"
-                                                        onClick={() => this.setState({ open: !this.state.open })}
-                                                    >
-                                                        {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                                        {account.accountName}
-                                                    </IconButton>
-                                                </TableCell>
-                                                {/* <TableCell component="th" scope="row">
-                                                    {account.accountName}
-                                                </TableCell> */}
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                                                        <Box sx={{ margin: 1 }}>
-                                                            
-                                                            <Table size="small" aria-label="purchases">
-                                                                <TableBody>
-                                                                    <TableRow>
-                                                                        <TableCell>Account Name</TableCell>
-                                                                        <TableCell>{account.accountName}</TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow>
-                                                                        <TableCell>Account Number</TableCell>
-                                                                        <TableCell>{account.accountNumber}</TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow>
-                                                                        <TableCell>Account Type</TableCell>
-                                                                        <TableCell>{account.accountType}</TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow>
-                                                                        <TableCell>Account Balance</TableCell>
-                                                                        <TableCell>{account.balance}</TableCell>
-                                                                    </TableRow>
-                                                                    <TableRow>
-                                                                        <TableCell>Account Created At</TableCell>
-                                                                        <TableCell>{account.createdAt}</TableCell>
-                                                                    </TableRow>
-                                                                </TableBody>
-                                                            </Table>
-                                                        </Box>
-                                                    </Collapse>
-                                                </TableCell>
-                                            </TableRow>
-                                        </React.Fragment>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                    <div>
+                        <div className="dashboard-buttons-container">
+                            <Button className="add-account-button" variant="contained" onClick={() => this.setState({ openAddAccountModal: true })}>Add Account</Button>
+                            <Button className="transit-button" variant="contained">Transit</Button>
+                        </div>
+                        <div className="dashboard-table-container">
+
+                            {this.state.accountList.map(account => (
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        {account.accountName}
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <TableContainer component={Paper}>
+                                            <Table aria-label="collapsible table">
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell>Account Name</TableCell>
+                                                        <TableCell align='right'>{account.accountName}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Account Number</TableCell>
+                                                        <TableCell align='right'>{account.accountNumber}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Account Type</TableCell>
+                                                        <TableCell align='right'>{account.accountType}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Account Balance</TableCell>
+                                                        <TableCell align='right'>{account.balance}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>Account Created At</TableCell>
+                                                        <TableCell align='right'>{account.createdAt}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))}
+
+                        </div>
                     </div>
                 }
+                <AddAccountModal
+                    openAddAccountModal={this.state.openAddAccountModal}
+                    onClose={() => this.setState({ openAddAccountModal: false })}
+                    fetchAccountList={this.fetchAccountList}
+                />
             </div>
         );
     }
