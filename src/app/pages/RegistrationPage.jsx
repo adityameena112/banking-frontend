@@ -25,6 +25,7 @@ class RegistrationPage extends Component {
             lastName: this.state.lastName
         }).then((response) => {
             toast.success("Register Successful")
+            window.location.href="/"
         }).catch((error) => {
             toast.error("Unable to register user")
         })
